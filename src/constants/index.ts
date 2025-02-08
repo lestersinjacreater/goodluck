@@ -7,12 +7,16 @@ export const INTERVIEW_CATEGORY = [
   { id: "failed", title: "Failed", variant: "destructive" },
 ] as const;
 
-// Dynamically generate all possible times from "00:00" to "23:59"
+// Dynamically generate all possible times in the 12-hour format ("12:00 AM" to "11:59 PM")
 export const TIME_SLOTS = (() => {
   const slots: string[] = [];
   for (let hour = 0; hour < 24; hour++) {
     for (let minute = 0; minute < 60; minute++) {
-      slots.push(`${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`);
+      const suffix = hour < 12 ? "AM" : "PM";
+      let twelveHour = hour % 12;
+      // When hour % 12 is 0, it should be represented as 12.
+      if (twelveHour === 0) twelveHour = 12;
+      slots.push(`${twelveHour}:${minute.toString().padStart(2, "0")} ${suffix}`);
     }
   }
   return slots;
